@@ -18,12 +18,22 @@
   tasks:
   
   - copy:
-      src: /usr/share/maven3/nvnshoppingcart/target/nvnshoppingcart.war
-      dest: /usr/local/apache-tomcat-8.0.21/webapps/
+      src: /home/ec2-user/nvnshoppingcart.war
+      dest: /usr/local/apache-tomcat-8.0.21/webapps/nvnshoppingcart.war
       become: true
       root: true
       mode: 0755
+  
+  - name: Unzip war file
+    unarchive: src=/usr/local/apache-tomcat-8.0.21/webapps/nvnshoppingcart.war to=/usr/local/apache-tomcat-8.0.21/webapps/ copy=no mode=0755 owner=root group=root
+    become: true
+    root: true
 
   - name: start tomcat service
     become: true
     service: name=tomcat state=started
+
+  - name: Delete remote war file
+    file: path=/usr/local/apache-tomcat-8.0.21/webapps/nvnshoppingcart.war state=absent
+    become: true
+    root: true
